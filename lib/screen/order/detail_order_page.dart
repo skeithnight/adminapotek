@@ -52,10 +52,6 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
               )),
               ListTile(
-                title: Text("Alamat"),
-                subtitle: Text(order.address),
-              ),
-              ListTile(
                 title: Text("Note"),
                 subtitle: Text(order.note),
               ),
@@ -63,6 +59,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
                 title: Text("Total Tagihan"),
                 subtitle: Text("Rp. ${hitungTagihan(order)}"),
               ),
+              showExpansionTile("List Obat", order.produk)
             ],
           ),
         ),
@@ -72,9 +69,9 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
     List<Widget> listDataWidget = [];
     for (var item in listData) {
       listDataWidget.add(new ListTile(
-        title: Text(item.service.name),
+        title: Text(item.service.nama),
         subtitle: Text("Jumlah : ${item.jumlah}"),
-        trailing: Text("Rp. ${item.jumlah * item.service.price}"),
+        trailing: Text("Rp. ${item.jumlah * item.service.harga}"),
       ));
     }
     return ExpansionTile(
@@ -83,66 +80,13 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
     );
   }
 
-  double hitungTagihan(Order order){
-    double totalGrooming = 0;
-    double totalClinic = 0;
-    double totalHotel = 0;
+  double hitungTagihan(Order order) {
+    double totalProduk = 0;
 
-    if(order.groomings != null){
-      for (var item in order.groomings) {
-        totalGrooming = totalGrooming + (item.jumlah * item.service.price);
-      }
+    for (var item in order.produk) {
+      totalProduk = totalProduk + (item.jumlah * item.service.harga);
     }
-    if(order.clinics != null){
-      for (var item in order.clinics) {
-        totalClinic = totalClinic + (item.jumlah * item.service.price);
-      }
-    }
-    if(order.hotels != null){
-      for (var item in order.hotels) {
-        totalHotel = totalHotel + (item.jumlah * item.service.price);
-      }
-    }
-    return totalGrooming + totalClinic + totalHotel;
-  }
-
-  Widget mapswidget() => new Container(
-        padding: EdgeInsets.all(10.0),
-        height: 200.0,
-        width: double.infinity,
-        child: Card(
-          elevation: 2.0,
-          child: MapsWidget(
-            lat: order.latitude != null ? order.latitude : -6.934837,
-            lon: order.longitude != null ? order.longitude : 107.620810,
-            listMarker: [
-              new Marker(
-                width: 80.0,
-                height: 80.0,
-                point: new LatLng(
-                    order.latitude != null ? order.latitude : -6.934837,
-                    order.longitude != null ? order.longitude : 107.620810),
-                builder: (ctx) => new Container(
-                      child: Icon(Icons.place),
-                    ),
-              )
-            ],
-          ),
-        ),
-      );
-
-  Widget textButon() {
-    if (order.status.toLowerCase() == "sampai-Apotek") {
-      return Text(
-        "Proses ",
-        style: TextStyle(color: Colors.white),
-      );
-    } else if (order.status.toLowerCase() == "proses") {
-      return Text(
-        "Service Selesai",
-        style: TextStyle(color: Colors.white),
-      );
-    }
+    return totalProduk;
   }
 
   Widget content() => new Center(
@@ -154,29 +98,10 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    mapswidget(),
+                    // Container()
                     orderContent(),
                   ],
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: FractionalOffset.bottomCenter,
-              child: Container(
-                margin: EdgeInsets.all(10.0),
-                width: double.infinity,
-                height: 100.0,
-                child:
-                    order.status == "sampai-Apotek" || order.status == "proses"
-                        ? RaisedButton(
-                            onPressed: () =>
-                                OrderController(context).changeStatus(order),
-                            color: Colors.green,
-                            child: textButon(),
-                          )
-                        : null,
               ),
             ),
           )
@@ -191,6 +116,7 @@ class _DetailOrderPageState extends State<DetailOrderPage> {
           title: Text("Detail Order"),
           backgroundColor: Colors.lightGreen,
         ),
+        // body: Container(),
         body: content(),
         // bottomNavigationBar: widget.level == "add" ? saveButton() : Container(),
       ),

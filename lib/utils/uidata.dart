@@ -4,6 +4,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class UIData {
+  // icon
+  static const String uriIcon = "https://pngimage.net/wp-content/uploads/2018/05/apotek-icon-png-8.png";
+
   //routes
   static const String homeRoute = "/home";
   static const String profileOneRoute = "/View Profile";

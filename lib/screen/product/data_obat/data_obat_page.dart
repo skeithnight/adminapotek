@@ -34,8 +34,8 @@ class _DataObatPageState extends State<DataObatPage> {
                       builder: (context) =>
                           DetailObatPage('detail', listData[index])));
                 },
-                title: Text(listData[index].name),
-                subtitle: Text(listData[index].price.toString()),
+                title: Text(listData[index].nama),
+                subtitle: Text(listData[index].harga.toString()),
               ),
             ));
   }

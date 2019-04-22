@@ -10,11 +10,8 @@ class Order {
   String address;
   double latitude;
   double longitude;
-  List<DetailTransaksi> groomings;
-  List<DetailTransaksi> clinics;
-  List<DetailTransaksi> hotels;
-  int from;
-  int to;
+  List<DetailTransaksi> produk;
+  int tanggal;
   String note;
   String status;
 
@@ -22,9 +19,7 @@ class Order {
 
   Order.fromSnapshot(
       Map<dynamic, dynamic> snapshot,
-      List<DetailTransaksi> groomings,
-      List<DetailTransaksi> clinics,
-      List<DetailTransaksi> hotels)
+      List<DetailTransaksi> produk)
       : id = snapshot["id"],
         customer = snapshot["customer"] == null
             ? null
@@ -35,11 +30,8 @@ class Order {
         address = snapshot["address"],
         latitude = snapshot["latitude"],
         longitude = snapshot["longitude"],
-        this.groomings = groomings,
-        this.clinics = clinics,
-        this.hotels = hotels,
-        from = snapshot["from"],
-        to = snapshot["to"],
+        this.produk = produk,
+        tanggal = snapshot["tanggal"],
         note = snapshot["note"],
         status = snapshot["status"];
   Map<String, dynamic> toJsonChangeStatus(
@@ -51,8 +43,7 @@ class Order {
         "address": address,
         "latitude": latitude,
         "longitude": longitude,
-        "from": from,
-        "to": to,
+        "tanggal": tanggal,
         "note": note,
         "status": statusEdit,
       };

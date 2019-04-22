@@ -28,6 +28,7 @@ dependencies:
   dio: ^1.0.9
   http: ^0.12.0 
   flutter_map:
+  flutter_datetime_picker: ^1.1.6
 
 dev_dependencies:
   flutter_test:

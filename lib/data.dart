@@ -8,7 +8,7 @@ List<String> listEnabled = ["True", "False"];
 
 
 // Product
-var urlObat = "$baseURL/obat";
+var urlObat = "$baseURL/produk";
 
 // Order
-var urlOrder = "$baseURL/transaction";
+var urlOrder = "$baseURL/transaksi";

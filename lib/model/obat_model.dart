@@ -5,10 +5,8 @@ class Obat extends Service {
   Obat();
   Obat.fromSnapshot(Map<dynamic, dynamic> snapshot) {
     id = snapshot["id"];
-    apotek = Apotek.fromSnapshot(snapshot["Apotek"]);
-    name = snapshot["name"];
-    descrition = snapshot["descrition"];
-    pictures = snapshot["pictures"];
-    price = snapshot["price"];
+    apotek = Apotek.fromSnapshot(snapshot["apotek"]);
+    nama = snapshot["nama"];
+    harga = snapshot["harga"];
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer';
 
 import 'package:adminapotek/data.dart' as data1;
 // import 'package:adminapotek/model/courier_model.dart';
@@ -28,18 +29,22 @@ class ProductController {
     };
     dio.options.baseUrl = data1.urlObat;
 
-    var response = await dio.get('/Apotek/${prefs.getString('idApotek')}');
+    var response = await dio.get('/apotek/${prefs.getString('idApotek')}');
+
+    log('data: ${prefs.getString('idApotek')}');
     List<dynamic> map = response.data;
     List<Obat> listObat = new List();
     for (var i = 0; i < map.length; i++) {
       listObat.add(Obat.fromSnapshot(map[i]));
     }
+    log('data: ${prefs.getString('idApotek')}');
+
     return listObat;
   }
-  void sendDataObat(Obat Obat) async {
-    if (checkDataObat(Obat)) {
+  void sendDataObat(Obat obat) async {
+    if (checkDataObat(obat)) {
       getToken().then((onValue) {
-        insertDataObat(Obat, onValue);
+        insertDataObat(obat, onValue);
       });
     } else {
       DialogWidget(context: context, dismiss: true)
@@ -47,12 +52,15 @@ class ProductController {
     }
   }
 
-  void insertDataObat(Obat Obat, String token) async {
+  void insertDataObat(Obat obat, String token) async {
     prefs = await SharedPreferences.getInstance();
-    Obat.idApotek = prefs.getString("idApotek");
-    // print(json.encode(courier.idApotek));
-    dio.options.headers = {"Authorization": "Bearer " + token};
-    dio.options.data = Obat.toJsonInsert();
+    obat.idApotek = prefs.getString("idApotek");
+    // print(obat.toJsonInsert());
+    // print(token);
+    // print(data1.urlObat);
+    dio.options.headers["Authorization"] = {"Bearer " + token};
+    dio.options.headers["Content-Type"] = {"application/json"};
+    dio.options.data = obat.toJsonInsert();
     dio.options.baseUrl = data1.urlObat;
 
     var response = await dio.post('');
@@ -68,10 +76,9 @@ class ProductController {
     }
   }
 
-  bool checkDataObat(Obat Obat) {
-    if (Obat.name == null ||
-        Obat.descrition == null ||
-        Obat.price == null) {
+  bool checkDataObat(Obat obat) {
+    if (obat.nama == null ||
+        obat.harga == null) {
       return false;
     }
     return true;

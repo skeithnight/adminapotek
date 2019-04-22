@@ -4,30 +4,24 @@ class Service {
   String idApotek;
   String id;
   Apotek apotek;
-  String name;
-  String descrition;
-  List<String> pictures;
-  double price;
+  String nama;
+  int harga;
 
   Service();
   
 
   Service.fromSnapshot(Map<dynamic, dynamic> snapshot) {
     id = snapshot["id"];
-    apotek = Apotek.fromSnapshot(snapshot["Apotek"]);
-    name = snapshot["name"];
-    descrition = snapshot["descrition"];
-    pictures = snapshot["pictures"];
-    price = snapshot["price"];
+    apotek = Apotek.fromSnapshot(snapshot["apotek"]);
+    nama = snapshot["nama"];
+    harga = snapshot["harga"];
   }
 
   Map<String, dynamic> toJsonInsert() => {
-        "Apotek": {
+        "apotek": {
           "id": idApotek,
         },
-        "name": name,
-        "descrition": descrition,
-        // "pictures": address,
-        "price": price,
+        "nama": nama,
+        "harga": harga,
       };
 }

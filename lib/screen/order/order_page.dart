@@ -40,21 +40,8 @@ class _OrderPageState extends State<OrderPage> {
                           DetailOrderPage('detail', listData[index])));
                 },
                 title: Text(listData[index].customer.name),
-                subtitle: Text(listData[index].address),
-                trailing: listData[index].status == "waiting"
-                    ? Icon(Icons.hourglass_empty)
-                    : listData[index].status == "jemput" ||
-                            listData[index].status == "antar"
-                        ? Icon(Icons.directions_car)
-                        : listData[index].status == "sampai-Apotek"
-                            ? Icon(Icons.flag)
-                            : listData[index].status == "proses"
-                                ? Icon(Icons.pets)
-                                : listData[index].status == "selesai-Apotek"
-                                    ? Icon(Icons.done)
-                                    : listData[index].status == "selesai"
-                                        ? Icon(Icons.done_all)
-                                        : null,
+                subtitle: Text(listData[index].note),
+                trailing: Text(listData[index].status),
               ),
             ));
   }

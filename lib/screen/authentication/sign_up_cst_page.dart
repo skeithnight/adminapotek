@@ -8,11 +8,11 @@ import 'package:adminapotek/model/apotek_model.dart';
 import 'login_page.dart';
 import 'package:adminapotek/controller/register_controller.dart';
 
-class SignUpPage extends StatefulWidget {
-  _SignUpPageState createState() => _SignUpPageState();
+class SignUpCstPage extends StatefulWidget {
+  _SignUpCstPageState createState() => _SignUpCstPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpCstPageState extends State<SignUpCstPage> {
   Apotek apotek = new Apotek();
   Size deviceSize;
 
@@ -33,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  List _jenisKelamin = ["Jenis Kelamin","Laki-Laki", "Perempuan"];
+  List _jenisKelamin = ["Jenis Kelamin", "Laki-Laki", "Perempuan"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentJenisKelamin;
@@ -53,8 +53,8 @@ class _SignUpPageState extends State<SignUpPage> {
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
     for (String jenisKelamin in _jenisKelamin) {
-      items.add(
-          new DropdownMenuItem(value: jenisKelamin, child: new Text(jenisKelamin)));
+      items.add(new DropdownMenuItem(
+          value: jenisKelamin, child: new Text(jenisKelamin)));
     }
     return items;
   }
@@ -128,9 +128,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               showTitleActions: true,
                               minTime: DateTime(1940, 1, 1),
                               maxTime: DateTime(2018, 1, 1), onChanged: (date) {
-                                _tanggalCTRL.text = changeDate(date);
+                            _tanggalCTRL.text = changeDate(date);
                           }, onConfirm: (date) {
-                                _tanggalCTRL.text = changeDate(date);
+                            _tanggalCTRL.text = changeDate(date);
                           },
                               currentTime: DateTime.now(),
                               locale: LocaleType.en);
@@ -190,45 +190,16 @@ class _SignUpPageState extends State<SignUpPage> {
             Container(
               padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
               child: TextField(
-                maxLines: 1,
+                maxLines: 3,
                 onChanged: (text) {
                   setState(() {
                     this.apotek.address = text;
                   });
                 },
+                keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
                   hintText: "Enter your Email",
                   labelText: "Email Anda",
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-              child: TextField(
-                maxLines: 1,
-                onChanged: (text) {
-                  setState(() {
-                    this.apotek.address = text;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: "Enter your phone number",
-                  labelText: "No. Handphone",
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-              child: TextField(
-                maxLines: 1,
-                onChanged: (text) {
-                  setState(() {
-                    this.apotek.address = text;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: "Enter your apotek",
-                  labelText: "Nama Apotek",
                 ),
               ),
             ),
@@ -268,7 +239,10 @@ class _SignUpPageState extends State<SignUpPage> {
               },
               child: Text(
                 "Login",
-                style: TextStyle(color: Colors.grey, decoration: TextDecoration.underline,),
+                style: TextStyle(
+                  color: Colors.grey,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             )
           ],

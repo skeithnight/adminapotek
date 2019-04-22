@@ -4,6 +4,8 @@ import 'package:adminapotek/utils/uidata.dart';
 import 'package:adminapotek/main.dart';
 import 'package:adminapotek/model/apotek_model.dart';
 import 'sign_up_page.dart';
+import 'sign_up_cst_page.dart';
+import 'forgot_pass_page.dart';
 import 'package:adminapotek/controller/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -23,6 +25,32 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  List _jenisUser = ["Pengguna", "Apoteker"];
+
+  List<DropdownMenuItem<String>> _dropDownMenuItems;
+  String _currentJenisUser;
+  void changedDropDownItem(String selectedJenisUser) {
+    setState(() {
+      _currentJenisUser = selectedJenisUser;
+    });
+  }
+
+  @override
+  void initState() {
+    _dropDownMenuItems = getDropDownMenuItems();
+    _currentJenisUser = _dropDownMenuItems[0].value;
+    super.initState();
+  }
+
+  List<DropdownMenuItem<String>> getDropDownMenuItems() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String jenisUser in _jenisUser) {
+      items.add(
+          new DropdownMenuItem(value: jenisUser, child: new Text(jenisUser)));
+    }
+    return items;
+  }
+
   loginBody(context) => SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -40,23 +68,11 @@ class _LoginPageState extends State<LoginPage> {
               shape: BoxShape.circle,
               image: new DecorationImage(
                   fit: BoxFit.fill,
-                  image: new NetworkImage(
-                      "https://pngimage.net/wp-content/uploads/2018/05/apotek-icon-png-8.png")),
+                  image: new NetworkImage("${UIData.uriIcon}")),
             ),
           ),
           SizedBox(
             height: 30.0,
-          ),
-          Text(
-            "Welcome to ${UIData.appName}",
-            style: TextStyle(fontWeight: FontWeight.w700, color: Colors.green),
-          ),
-          SizedBox(
-            height: 5.0,
-          ),
-          Text(
-            "Sign in to continue",
-            style: TextStyle(color: Colors.grey),
           ),
         ],
       );
@@ -76,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: "Enter your username",
-                  labelText: "Username",
+                  hintText: "Enter your email",
+                  labelText: "Email",
                 ),
               ),
             ),
@@ -98,7 +114,43 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
+              height: 15.0,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
+              width: double.infinity,
+              child: DropdownButtonHideUnderline(
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton(
+                    value: _currentJenisUser,
+                    items: _dropDownMenuItems,
+                    onChanged: changedDropDownItem,
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
               height: 30.0,
+            ),
+            FlatButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => ForgotPassPage())));
+              },
+              child: Text(
+                "Lupa Password ?",
+                style: TextStyle(
+                  color: Colors.grey,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 5.0,
             ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 30.0),
@@ -119,16 +171,26 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: 5.0,
+              height: 30.0,
             ),
             FlatButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => SignUpPage())));
+                if (_currentJenisUser.contains("Apoteker")) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: ((context) => SignUpPage())));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => SignUpCstPage())));
+                }
               },
               child: Text(
-                "SIGN UP FOR AN ACCOUNT",
-                style: TextStyle(color: Colors.grey),
+                "Belum punya akun? SIGN UP",
+                style: TextStyle(
+                  color: Colors.grey,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             )
           ],

@@ -26,9 +26,8 @@ class _DetailObatPageState extends State<DetailObatPage> {
     if (widget.level != 'add') {
       setState(() {
         obat = widget._obat;
-        nameEditingController.text = widget._obat.name;
-        descriptionEditingController.text = widget._obat.descrition;
-        priceEditingController.text = widget._obat.price.toString();
+        nameEditingController.text = widget._obat.nama;
+        priceEditingController.text = widget._obat.harga.toString();
       });
     }
   }
@@ -47,40 +46,24 @@ class _DetailObatPageState extends State<DetailObatPage> {
                   controller: nameEditingController,
                   onChanged: (text) {
                     setState(() {
-                      obat.name = text;
+                      obat.nama = text;
                     });
                   },
                   maxLines: 1,
                   decoration: InputDecoration(
-                    hintText: "Enter your service",
-                    labelText: "Service Name",
+                    hintText: "Enter your Medicine",
+                    labelText: "Medicine Name",
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-                child: TextField(
-                  controller: descriptionEditingController,
-                  onChanged: (text) {
-                    setState(() {
-                      obat.descrition = text;
-                    });
-                  },
-                  maxLines: 3,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    hintText: "Enter Obat description",
-                    labelText: "Description",
-                  ),
-                ),
-              ),
+              
               Container(
                 padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
                 child: TextField(
                   controller: priceEditingController,
                   onChanged: (text) {
                     setState(() {
-                      obat.price = double.parse(text);
+                      obat.harga = int.parse(text);
                     });
                   },
                   maxLines: 1,

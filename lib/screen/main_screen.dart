@@ -6,7 +6,7 @@ import 'package:adminapotek/screen/authentication/login_page.dart';
 import 'package:adminapotek/data.dart' as data;
 import 'package:adminapotek/controller/login_controller.dart';
 import 'order/order_page.dart';
-import 'package:adminapotek/screen/product/product_page.dart';
+import 'package:adminapotek/screen/product/data_obat/data_obat_page.dart';
 import 'profile/profile_page.dart';
 import 'widget/appbar_widget.dart';
 import 'package:adminapotek/model/apotek_model.dart';
@@ -65,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
                   body: TabBarView(
                     children: <Widget>[
                       new OrderPage(),
-                      new ProductPage(),
+                      new DataObatPage(),
                       new ProfilePage(),
                     ],
                   ),

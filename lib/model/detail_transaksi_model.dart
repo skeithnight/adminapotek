@@ -8,8 +8,8 @@ class DetailTransaksi {
   DetailTransaksi();
 
   DetailTransaksi.fromSnapshot(Map<dynamic, dynamic> snapshot)
-      : service = snapshot["service"] == null
+      : service = snapshot["produk"] == null
             ? null
-            : Service.fromSnapshot(snapshot["service"]),
+            : Service.fromSnapshot(snapshot["produk"]),
         jumlah = snapshot["jumlah"];
 }
