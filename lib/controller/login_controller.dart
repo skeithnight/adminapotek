@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:adminapotek/data.dart' as data1;
 import 'package:adminapotek/model/apotek_model.dart';
+import 'package:adminapotek/model/customer_model.dart';
 import 'package:adminapotek/screen/widget/dialog_widget.dart';
 import 'package:adminapotek/screen/main_screen.dart';
 import 'package:adminapotek/screen/authentication/login_page.dart';
@@ -13,15 +14,21 @@ class LoginController {
   BuildContext context;
   LoginController(this.context);
   Dio dio = new Dio();
-  void sendData(Apotek Apotek) async {
+  void sendData(Apotek apotek, String level) async {
     try {
-      if (checkData(Apotek)) {
+      if (checkData(apotek)) {
         try {
-          var response =
-              await dio.post(data1.urlLogin, data: Apotek.toJsonLogin());
+          print(level);
+          if (level.contains("Apotek")) {
+            dio.options.baseUrl = data1.urlApotekLogin;
+          } else {
+            dio.options.baseUrl = data1.urlCustomerLogin;
+          }
+          var response = await dio.post('', data: apotek.toJsonLogin());
           // If server returns an OK response, parse the JSON
           SharedPreferences _prefs = await SharedPreferences.getInstance();
           _prefs.setString('token', response.data['token']);
+          _prefs.setString('level', level);
           _prefs.commit();
           DialogWidget(context: context, dismiss: true)
               .tampilDialog("Success", "Success login..", MainScreen());
@@ -41,8 +48,8 @@ class LoginController {
     }
   }
 
-  bool checkData(Apotek Apotek) {
-    if (Apotek.username == null || Apotek.password == null) {
+  bool checkData(Apotek apotek) {
+    if (apotek.email == null || apotek.password == null) {
       return false;
     }
     return true;
@@ -59,10 +66,10 @@ class LoginController {
     }
   }
 
-  Future<String> checkToken() async {
+  Future<String> checkToken(String level) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      checkSession();
+      checkSession(level);
       if (prefs.getString('token') == null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: ((context) => LoginPage())));
@@ -74,14 +81,38 @@ class LoginController {
     return prefs.getString('token');
   }
 
-  Future<Apotek> checkSession() async {
+  Future<String> checkSession(String level) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     dio.options.headers = {
       "Authorization": "Bearer " + prefs.getString('token') ?? ''
     };
+    if (level.contains('Apotek')) {
+      dio.options.baseUrl = data1.urlApotekCheckSession;
+    } else {
+      dio.options.baseUrl = data1.urlCustomerCheckSession;
+    }
     Response response;
     try {
-      response = await dio.get(data1.urlCheckSession);
+      response = await dio.get('');
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      print(e.message);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => LoginPage())));
+    }
+    return response.data.toString();
+  }
+
+  Future<Apotek> checkSessionApt() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.options.headers = {
+      "Authorization": "Bearer " + prefs.getString('token') ?? ''
+    };
+    dio.options.baseUrl = data1.urlApotekCheckSession;
+    Response response;
+    try {
+      response = await dio.get('');
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
@@ -94,5 +125,28 @@ class LoginController {
     prefs.setString("idApotek", apotek.id);
     prefs.commit();
     return apotek;
+  }
+
+  Future<Customer> checkSessionCst() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dio.options.headers = {
+      "Authorization": "Bearer " + prefs.getString('token') ?? ''
+    };
+    dio.options.baseUrl = data1.urlApotekCheckSession;
+    Response response;
+    try {
+      response = await dio.get('');
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      print(e.message);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: ((context) => LoginPage())));
+    }
+    // print(response.data);
+    Customer customer = Customer.fromSnapshot(response.data);
+    prefs.setString("idCst", customer.id);
+    prefs.commit();
+    return customer;
   }
 }

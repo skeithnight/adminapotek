@@ -67,8 +67,9 @@ class _LoginPageState extends State<LoginPage> {
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
               image: new DecorationImage(
-                  fit: BoxFit.fill,
-                  image: new NetworkImage("${UIData.uriIcon}")),
+                fit: BoxFit.fill,
+                image: new ExactAssetImage('assets/icon/logoapotek.png'),
+              ),
             ),
           ),
           SizedBox(
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                 maxLines: 1,
                 onChanged: (text) {
                   setState(() {
-                    this.apotek.username = text;
+                    this.apotek.email = text;
                   });
                 },
                 decoration: InputDecoration(
@@ -164,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 color: Colors.green,
                 onPressed: () {
-                  LoginController(context).sendData(apotek);
+                  LoginController(context).sendData(apotek, _currentJenisUser);
                   // Navigator.pushReplacement(context,
                   //     MaterialPageRoute(builder: ((context) => MyApp())));
                 },

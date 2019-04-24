@@ -10,6 +10,10 @@ import 'package:adminapotek/screen/product/data_obat/data_obat_page.dart';
 import 'profile/profile_page.dart';
 import 'widget/appbar_widget.dart';
 import 'package:adminapotek/model/apotek_model.dart';
+import 'apotek/home_apotek_page.dart';
+import 'pengguna/home_pengguna_page.dart';
+import 'pengguna/about_page.dart';
+import 'pengguna/account_page.dart';
 
 class MainScreen extends StatefulWidget {
   static String tag = 'main-page';
@@ -17,44 +21,39 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  String token;
+  String level;
   SharedPreferences prefs;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    LoginController(context).checkToken();
+    initialized();
+  }
+
+  void initialized() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      this.level = prefs.getString("level");
+    });
+    LoginController(context).checkToken(level);
   }
 
   Widget bottomNavigator() => TabBar(
         labelColor: Colors.black,
         tabs: <Widget>[
           Tab(
-            icon: new Icon(
-              Icons.shopping_cart,
-              color: Colors.black,
-            ),
-            text: "Order",
+            text: "Home",
           ),
           Tab(
-            icon: new Icon(
-              Icons.shopping_basket,
-              color: Colors.black,
-            ),
-            text: "Product",
+            text: "About",
           ),
           Tab(
-              icon: new Icon(
-                Icons.store,
-                color: Colors.black,
-              ),
-              text: "Profile"),
+              text: "Account"),
         ],
       );
 
-  Widget content() => 
-  new FutureBuilder<Apotek>(
-        future: LoginController(context).checkSession(),
+  Widget content() => new FutureBuilder<String>(
+        future: LoginController(context).checkSession(level),
         builder: ((context, snapshot) {
           // print(snapshot.data);
           if (snapshot.hasData) {
@@ -62,14 +61,15 @@ class _MainScreenState extends State<MainScreen> {
               length: 4,
               child: SafeArea(
                 child: Scaffold(
+                  appBar: bottomNavigator(),
                   body: TabBarView(
                     children: <Widget>[
-                      new OrderPage(),
-                      new DataObatPage(),
-                      new ProfilePage(),
+                      new HomePenggunaPage(),
+                      new AboutPage(),
+                      new AccountPage(),
                     ],
                   ),
-                  bottomNavigationBar: bottomNavigator(),
+                  // bottomNavigationBar: bottomNavigator(),
                 ),
               ),
             );

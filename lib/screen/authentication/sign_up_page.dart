@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:adminapotek/utils/uidata.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:adminapotek/utils/changeDate.dart';
+import 'package:gplacespicker/gplacespicker.dart';
 
 import 'package:adminapotek/model/apotek_model.dart';
 import 'login_page.dart';
@@ -15,6 +16,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   Apotek apotek = new Apotek();
   Size deviceSize;
+  String latLng = "";
 
   TextEditingController _tanggalCTRL = new TextEditingController();
 
@@ -33,13 +35,14 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  List _jenisKelamin = ["Jenis Kelamin","Laki-Laki", "Perempuan"];
+  List _jenisKelamin = ["Jenis Kelamin", "Laki-Laki", "Perempuan"];
 
   List<DropdownMenuItem<String>> _dropDownMenuItems;
   String _currentJenisKelamin;
   void changedDropDownItem(String selectedJenisUser) {
     setState(() {
       _currentJenisKelamin = selectedJenisUser;
+      this.apotek.jk = selectedJenisUser;
     });
   }
 
@@ -53,8 +56,8 @@ class _SignUpPageState extends State<SignUpPage> {
   List<DropdownMenuItem<String>> getDropDownMenuItems() {
     List<DropdownMenuItem<String>> items = new List();
     for (String jenisKelamin in _jenisKelamin) {
-      items.add(
-          new DropdownMenuItem(value: jenisKelamin, child: new Text(jenisKelamin)));
+      items.add(new DropdownMenuItem(
+          value: jenisKelamin, child: new Text(jenisKelamin)));
     }
     return items;
   }
@@ -89,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
               child: TextField(
                 onChanged: (text) {
                   setState(() {
-                    this.apotek.name = text;
+                    this.apotek.staffName = text;
                   });
                 },
                 maxLines: 1,
@@ -106,12 +109,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   Expanded(
                     flex: 3,
                     child: TextField(
+                      enabled: false,
                       controller: _tanggalCTRL,
-                      onChanged: (text) {
-                        setState(() {
-                          this.apotek.noIjin = text;
-                        });
-                      },
                       maxLines: 1,
                       keyboardType: TextInputType.datetime,
                       decoration: InputDecoration(
@@ -128,9 +127,11 @@ class _SignUpPageState extends State<SignUpPage> {
                               showTitleActions: true,
                               minTime: DateTime(1940, 1, 1),
                               maxTime: DateTime(2018, 1, 1), onChanged: (date) {
-                                _tanggalCTRL.text = changeDate(date);
+                            _tanggalCTRL.text = changeDate(date);
+                            this.apotek.ttl = date.millisecondsSinceEpoch;
                           }, onConfirm: (date) {
-                                _tanggalCTRL.text = changeDate(date);
+                            this.apotek.ttl = date.millisecondsSinceEpoch;
+                            _tanggalCTRL.text = changeDate(date);
                           },
                               currentTime: DateTime.now(),
                               locale: LocaleType.en);
@@ -193,7 +194,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 maxLines: 1,
                 onChanged: (text) {
                   setState(() {
-                    this.apotek.address = text;
+                    this.apotek.email = text;
                   });
                 },
                 decoration: InputDecoration(
@@ -208,7 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 maxLines: 1,
                 onChanged: (text) {
                   setState(() {
-                    this.apotek.address = text;
+                    this.apotek.noTelp = text;
                   });
                 },
                 decoration: InputDecoration(
@@ -223,13 +224,46 @@ class _SignUpPageState extends State<SignUpPage> {
                 maxLines: 1,
                 onChanged: (text) {
                   setState(() {
-                    this.apotek.address = text;
+                    this.apotek.name = text;
                   });
                 },
                 decoration: InputDecoration(
                   hintText: "Enter your apotek",
                   labelText: "Nama Apotek",
                 ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
+              child: TextField(
+                onChanged: (text) {
+                  setState(() {
+                    this.apotek.noIjin = text;
+                  });
+                },
+                maxLines: 1,
+                decoration: InputDecoration(
+                  hintText: "No Ijin ...",
+                  labelText: "Nomor Ijin",
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(latLng),
+                  RaisedButton(
+                    child: Text("Pick Location"),
+                    onPressed: () async {
+                      String latLng = await Gplacespicker.openPlacePicker();
+                      setState(() {
+                        this.latLng = latLng;
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
             SizedBox(
@@ -248,8 +282,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       color: Colors.green,
                       onPressed: () {
+                        List<String> koordinat = this.latLng.split(";");
                         setState(() {
                           this.isloading = true;
+                          this.apotek.latitude = double.parse(koordinat[0]);
+                          this.apotek.longitude = double.parse(koordinat[1]);
                         });
                         RegisterController(context).sendData(apotek);
                       },
@@ -268,7 +305,10 @@ class _SignUpPageState extends State<SignUpPage> {
               },
               child: Text(
                 "Login",
-                style: TextStyle(color: Colors.grey, decoration: TextDecoration.underline,),
+                style: TextStyle(
+                  color: Colors.grey,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             )
           ],

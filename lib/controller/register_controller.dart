@@ -17,8 +17,9 @@ class RegisterController {
     apotek = _apotek;
 
     if (checkData() && checkData() != null) {
+      // print(apotek.toJsonRegister());
       var response =
-          await dio.post(data.urlRegister, data: apotek.toJsonRegister());
+          await dio.post(data.urlApotekRegister, data: apotek.toJsonRegister());
       if (response.statusCode == 200) {
         // If server returns an OK response, parse the JSON
         DialogWidget(context: context, dismiss: true)
@@ -37,7 +38,7 @@ class RegisterController {
   bool checkData() {
     bool result = false;
     if (apotek != null) {
-      if (apotek.username != null ||
+      if (apotek.email != null ||
           apotek.name != null ||
           apotek.password != null ||
           apotek.latitude != null ||

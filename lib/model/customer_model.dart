@@ -1,20 +1,33 @@
 class Customer {
   String id;
-  String username;
+  String email;
   String password;
   String name;
-  
+  String jk;
+  int ttl;
+  String noTelp;
+
   Customer();
 
   Customer.fromSnapshot(Map<dynamic, dynamic> snapshot)
       : id = snapshot["id"],
-        username = snapshot["username"],
+        email = snapshot["email"],
+        noTelp = snapshot["noTelp"],
+        jk = snapshot["jk"],
+        ttl = snapshot["ttl"],
         name = snapshot["name"];
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "username": username,
+        "email": email,
         "name": name,
+        "noTelp": noTelp,
+        "jk": jk,
+        "ttl": ttl,
         // "enabled": enabled,
+      };
+  Map<String, dynamic> toJsonLogin() => {
+        "username": email,
+        "password": password,
       };
 }

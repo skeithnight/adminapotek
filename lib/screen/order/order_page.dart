@@ -49,7 +49,7 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(context).appBar("Order"),
+      // appBar: AppBarWidget(context).appBar("Order"),
       body: content(),
     );
   }

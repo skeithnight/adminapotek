@@ -67,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Apotek>(
-      future: LoginController(context).checkSession(),
+      // future: LoginController(context).checkSession(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           nameEditingController.text = snapshot.data.name;
