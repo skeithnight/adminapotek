@@ -10,6 +10,7 @@ import 'package:adminapotek/model/order_model.dart';
 import 'package:adminapotek/model/customer_model.dart';
 import 'package:adminapotek/controller/login_controller.dart';
 import 'edit_acc_page.dart';
+import 'detail_apotek_page.dart';
 
 class CariObatPage extends StatefulWidget {
   _CariObatPageState createState() => _CariObatPageState();
@@ -35,7 +36,8 @@ class _CariObatPageState extends State<CariObatPage> {
       position: LatLng(-6.922189, 107.610197),
       infoWindow: InfoWindow(
         onTap: () {
-          Navigator.pop(context);
+          Navigator.push(context,
+              MaterialPageRoute(builder: ((context) => DetailApotek())));
         },
         title: 'Apotek Ating',
       ),
@@ -49,8 +51,7 @@ class _CariObatPageState extends State<CariObatPage> {
   );
 
   static final CameraPosition _kLake = CameraPosition(
-      target: LatLng(-6.922189, 107.610197),
-      zoom: 19.151926040649414);
+      target: LatLng(-6.922189, 107.610197), zoom: 19.151926040649414);
 
   @override
   Widget build(BuildContext context) {

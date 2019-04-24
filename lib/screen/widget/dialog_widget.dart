@@ -32,3 +32,27 @@ class DialogWidget {
     );
   }
 }
+
+// showDialog(
+//               barrierDismissible: false,
+//               context: context,
+//               child: new CupertinoAlertDialog(
+//                 title: new Column(
+//                   children: <Widget>[
+//                     new Text("GridView"),
+//                     new Icon(
+//                       Icons.favorite,
+//                       color: Colors.green,
+//                     ),
+//                   ],
+//                 ),
+//                 content: new Text("Selected Item $index"),
+//                 actions: <Widget>[
+//                   new FlatButton(
+//                       onPressed: () {
+//                         Navigator.of(context).pop();
+//                       },
+//                       child: new Text("OK"))
+//                 ],
+//               ),
+//             );

@@ -62,10 +62,9 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            width: 80.0,
-            height: 80.0,
+            width: 100.0,
+            height: 100.0,
             decoration: new BoxDecoration(
-              shape: BoxShape.circle,
               image: new DecorationImage(
                 fit: BoxFit.fill,
                 image: new ExactAssetImage('assets/icon/logoapotek.png'),
