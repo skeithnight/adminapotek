@@ -23,6 +23,8 @@ class _AccountPageState extends State<AccountPage> {
   var emailEditingController = new TextEditingController();
   var noTelpEditingController = new TextEditingController();
 
+  Customer _customer = new Customer();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -132,8 +134,10 @@ class _AccountPageState extends State<AccountPage> {
                     ),
                     color: Colors.green,
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: ((context) => EditAccountPage())));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => EditAccountPage(customer: _customer,))));
                     },
                   ),
                 ),
@@ -144,26 +148,35 @@ class _AccountPageState extends State<AccountPage> {
       );
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: content(),
-      ),
-    );
-    // return FutureBuilder<Customer>(
-    //   future: LoginController(context).checkSessionCst(),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       nameEditingController.text = snapshot.data.name;
-    //       addressEditingController.text = snapshot.data.address;
-    //       return SafeArea(
-    //         child: Scaffold(
-    //           appBar: AppBarWidget(context).appBar("Profile"),
-    //           body: content(),
-    //         ),
-    //       );
-    //     }
-    //     return Center(child: CircularProgressIndicator());
-    //   },
+    // return SafeArea(
+    //   child: Scaffold(
+    //     body: content(),
+    //   ),
     // );
+    return FutureBuilder<Customer>(
+      future: LoginController(context).checkSessionCst(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          this._customer = snapshot.data;
+          this.nameEditingController.text =
+              snapshot.data.name == null ? "" : snapshot.data.name;
+          this.ttlEditingController.text = snapshot.data.ttl == null
+              ? ""
+              : convertMilistoDate(snapshot.data.ttl);
+          this.jkEditingController.text =
+              snapshot.data.jk == null ? "" : snapshot.data.jk;
+          this.emailEditingController.text =
+              snapshot.data.email == null ? "" : snapshot.data.email;
+          this.noTelpEditingController.text =
+              snapshot.data.noTelp == null ? "" : snapshot.data.noTelp;
+          return SafeArea(
+            child: Scaffold(
+              body: content(),
+            ),
+          );
+        }
+        return Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }

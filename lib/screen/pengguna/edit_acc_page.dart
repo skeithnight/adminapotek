@@ -9,6 +9,8 @@ import 'package:adminapotek/model/customer_model.dart';
 import 'package:adminapotek/controller/login_controller.dart';
 
 class EditAccountPage extends StatefulWidget {
+  Customer customer;
+  EditAccountPage({Key key, @required this.customer}) : super(key: key);
   _EditAccountPageState createState() => _EditAccountPageState();
 }
 
@@ -30,11 +32,11 @@ class _EditAccountPageState extends State<EditAccountPage> {
 
   void initialized() async {
     setState(() {
-      this.nameEditingController.text = "Tono";
-      this.ttlEditingController.text = convertMilistoDate(157741200000);
-      this.jkEditingController.text = "Laki-Laki";
-      this.emailEditingController.text = "Tono@gmail.com";
-      this.noTelpEditingController.text = "085712123123";
+      this.nameEditingController.text = widget.customer.name == null?"":widget.customer.name;
+      this.ttlEditingController.text = widget.customer.ttl == null?"":widget.customer.ttl.toString();
+      this.jkEditingController.text = widget.customer.jk == null?"":widget.customer.jk;
+      this.emailEditingController.text = widget.customer.email == null?"":widget.customer.email;
+      this.noTelpEditingController.text = widget.customer.noTelp == null?"":widget.customer.noTelp.toString();
     });
   }
 

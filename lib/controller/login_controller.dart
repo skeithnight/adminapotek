@@ -132,10 +132,11 @@ class LoginController {
     dio.options.headers = {
       "Authorization": "Bearer " + prefs.getString('token') ?? ''
     };
-    dio.options.baseUrl = data1.urlApotekCheckSession;
+    dio.options.baseUrl = data1.urlCustomerCheckSession;
     Response response;
     try {
       response = await dio.get('');
+      print(response.data.toString());
     } on DioError catch (e) {
       // The request was made and the server responded with a status code
       // that falls out of the range of 2xx and is also not 304.
